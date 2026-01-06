@@ -45,6 +45,25 @@ npm run build:mac
 npm run build:linux
 ```
 
+## Terminal Campfire 🔥
+
+If you want a local-friendly game-like REPL to hack on Python together, use the
+`scripts/python_campfire.py` helper. It keeps a shared execution context, lets
+players join or swap turns, and can load whole Python files into the session.
+
+```bash
+python3 scripts/python_campfire.py --session "Lan Party"
+```
+
+Useful commands inside the prompt:
+
+- `/join <name>` – add a player and set them as active when they are the first to join
+- `/switch <name>` – move the prompt to another player
+- `/load <path>` – run a Python script file into the shared context
+- `/history` – review recent snippets
+- `/save <path>` – export the history log
+- `/reset` – clear state while keeping the roster
+
 ## License 📜
 
 This project is licensed under the **Open WebUI Sustainable Use License**. For details, see [LICENSE](LICENSE).

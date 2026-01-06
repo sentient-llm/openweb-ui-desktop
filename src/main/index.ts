@@ -26,6 +26,7 @@ import {
     installPython,
     isPackageInstalled,
     isPythonInstalled,
+    executePythonCode,
     isUvInstalled,
     openUrl,
     resetApp,
@@ -485,6 +486,10 @@ if (!gotTheLock) {
 
         ipcMain.handle("status:python", async (event) => {
             return (await isPythonInstalled()) && (await isUvInstalled());
+        });
+
+        ipcMain.handle("python:execute", async (event, { code }) => {
+            return await executePythonCode(code ?? "");
         });
 
         ipcMain.handle("status:package", async (event) => {

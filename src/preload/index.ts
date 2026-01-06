@@ -122,6 +122,16 @@ const api = {
         return await ipcRenderer.invoke("status:package");
     },
 
+    runPython: async (code: string) => {
+        if (!isLocalSource()) {
+            throw new Error(
+                "Access restricted: This operation is only allowed in a local environment."
+            );
+        }
+
+        return await ipcRenderer.invoke("python:execute", { code });
+    },
+
     getServerStatus: async () => {
         if (!isLocalSource()) {
             throw new Error(

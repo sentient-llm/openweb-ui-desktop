@@ -6,6 +6,7 @@
     import logoImage from "../assets/images/splash.png";
     import General from "./Controls/General.svelte";
     import About from "./Controls/About.svelte";
+    import PythonRepl from "./Controls/PythonRepl.svelte";
 
     let { installed = $bindable(false) } = $props();
 
@@ -76,6 +77,35 @@
                 </button>
 
                 <button
+                    id="python"
+                    class="px-0.5 py-1 min-w-fit rounded-lg sm:flex-none flex text-left transition {selectedTab ===
+                    'python'
+                        ? ''
+                        : ' text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'}"
+                    onclick={() => {
+                        selectedTab = "python";
+                    }}
+                >
+                    <div class=" self-center mr-2">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="size-4"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M8.25 4.5 3.75 9l4.5 4.5M15.75 19.5h4.5m-4.5-6h4.5m-4.5-6h4.5"
+                            />
+                        </svg>
+                    </div>
+                    <div class=" self-center">{"Python REPL"}</div>
+                </button>
+
+                <button
                     id="about"
                     class="px-0.5 py-1 min-w-fit rounded-lg md:flex-none flex text-left transition {selectedTab ===
                     'about'
@@ -109,6 +139,8 @@
             >
                 {#if selectedTab === "general"}
                     <General bind:installed info={$info} />
+                {:else if selectedTab === "python"}
+                    <PythonRepl />
                 {:else if selectedTab === "about"}
                     <About />
                 {/if}

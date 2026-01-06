@@ -438,6 +438,60 @@ export const isUvInstalled = (installationDir?: string) => {
     }
 };
 
+export const executePythonCode = async (
+    code: string
+): Promise<{ stdout: string; stderr: string; exitCode: number }> => {
+    if (!code) {
+        throw new Error("No Python code provided for execution");
+    }
+
+    if (!isPythonInstalled()) {
+        throw new Error("Python is not installed");
+    }
+
+    const pythonPath = getPythonPath();
+    log.info(`Executing Python code using: ${pythonPath}`);
+
+    return await new Promise((resolve, reject) => {
+        const child = spawn(pythonPath, ["-u", "-c", code], {
+            cwd: getUserHomePath(),
+            env: {
+                ...process.env,
+                ...(process.platform === "win32"
+                    ? { PYTHONIOENCODING: "utf-8" }
+                    : {}),
+            },
+        });
+
+        let stdout = "";
+        let stderr = "";
+
+        child.stdout?.on("data", (data) => {
+            stdout += data.toString();
+        });
+
+        child.stderr?.on("data", (data) => {
+            stderr += data.toString();
+        });
+
+        child.on("error", (error) => {
+            log.error("Failed to execute Python code", error);
+            reject(error);
+        });
+
+        child.on("close", (code) => {
+            const result = {
+                stdout: stdout.trimEnd(),
+                stderr: stderr.trimEnd(),
+                exitCode: code ?? 0,
+            };
+
+            log.info(`Python execution completed with code ${code}`);
+            resolve(result);
+        });
+    });
+};
+
 export const uninstallPython = (installationDir?: string): boolean => {
     installationDir = installationDir || getPythonInstallationDir();
 
